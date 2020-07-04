@@ -6,7 +6,7 @@ hot ./server.js
 ```
 
 ## Installation
-Install [passing-notes](https://yarnpkg.com/en/package/passing-notes)
+Install [hot-esm](https://yarnpkg.com/en/package/hot-esm)
 by running
 
 ```sh
