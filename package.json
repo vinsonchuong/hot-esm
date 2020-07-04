@@ -1,0 +1,47 @@
+{
+  "name": "hot-esm",
+  "version": "0.0.0",
+  "description": "ESM hot-reloading for Node.js",
+  "keywords": [
+    "hot",
+    "hot-reloading",
+    "hmr"
+  ],
+  "homepage": "https://github.com/vinsonchuong/hot-esm",
+  "bugs": "https://github.com/vinsonchuong/hot-esm/issues",
+  "license": "MIT",
+  "author": "Vinson Chuong <vinsonchuong@gmail.com>",
+  "type": "module",
+  "main": "./index.js",
+  "bin": {
+    "hot": "./hot"
+  },
+  "repository": "vinsonchuong/hot-esm",
+  "scripts": {
+    "test": "xo && ava",
+    "release": "semantic-release"
+  },
+  "dependencies": {
+    "@parcel/watcher": "^2.0.0-alpha.7"
+  },
+  "devDependencies": {
+    "ava": "^3.9.0",
+    "fs-extra": "^9.0.1",
+    "got": "^11.3.0",
+    "semantic-release": "^17.1.1",
+    "tempy": "^0.5.0",
+    "xo": "^0.32.1"
+  },
+  "xo": {
+    "prettier": true,
+    "space": 2,
+    "semicolon": false,
+    "rules": {
+      "import/extensions": "off"
+    }
+  },
+  "ava": {
+    "verbose": true,
+    "timeout": "5m"
+  }
+}

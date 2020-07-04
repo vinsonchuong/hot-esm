@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+npx --node-arg '--no-warnings --experimental-loader hot-esm' "$@"
