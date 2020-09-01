@@ -5,8 +5,8 @@ import {promisify} from 'util'
 import tempy from 'tempy'
 import fs from 'fs-extra'
 import got from 'got'
+import install from 'quick-install'
 
-const exec = promisify(childProcess.exec)
 const sleep = promisify(setTimeout)
 
 async function get(url) {
@@ -26,7 +26,9 @@ test('updating and re-importing a file', async (t) => {
   }
 
   await writeFile('package.json', '{"type": "module"}')
-  await exec(`yarn add file:${path.resolve()}`, {cwd: temporaryDir})
+
+  await install(path.resolve(), temporaryDir)
+
   await writeFile(
     'server.js',
     `
