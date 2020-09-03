@@ -1,8 +1,8 @@
 import test from 'ava'
+import {useTemporaryDirectory} from 'ava-patterns'
 import * as path from 'path'
 import * as childProcess from 'child_process'
 import {promisify} from 'util'
-import tempy from 'tempy'
 import fs from 'fs-extra'
 import got from 'got'
 import install from 'quick-install'
@@ -15,11 +15,7 @@ async function get(url) {
 }
 
 test('updating and re-importing a file', async (t) => {
-  const temporaryDir = tempy.directory()
-  await fs.ensureDir(temporaryDir)
-  t.teardown(async () => {
-    await fs.remove(temporaryDir)
-  })
+  const temporaryDir = await useTemporaryDirectory(t)
 
   async function writeFile(name, contents) {
     await fs.writeFile(path.join(temporaryDir, name), contents)
