@@ -1,27 +1,15 @@
 import test from 'ava'
-import {useTemporaryDirectory, runProcess, wait} from 'ava-patterns'
-import * as path from 'path'
-import fs from 'fs-extra'
-import got from 'got'
+import {useTemporaryDirectory, runProcess, wait, http} from 'ava-patterns'
 import install from 'quick-install'
 
-async function get(url) {
-  const response = await got(url)
-  return response.body
-}
-
 test('updating and re-importing a file', async (t) => {
-  const temporaryDir = await useTemporaryDirectory(t)
+  const directory = await useTemporaryDirectory(t)
 
-  async function writeFile(name, contents) {
-    await fs.writeFile(path.join(temporaryDir, name), contents)
-  }
+  await directory.writeFile('package.json', '{"type": "module"}')
 
-  await writeFile('package.json', '{"type": "module"}')
+  await install(process.cwd(), directory.path)
 
-  await install(path.resolve(), temporaryDir)
-
-  await writeFile(
+  await directory.writeFile(
     'server.js',
     `
     import * as http from 'http'
@@ -37,7 +25,7 @@ test('updating and re-importing a file', async (t) => {
     )
     `
   )
-  await writeFile(
+  await directory.writeFile(
     'app.js',
     `
     export default function(request, response) {
@@ -48,13 +36,13 @@ test('updating and re-importing a file', async (t) => {
 
   const server = runProcess(t, {
     command: ['npx', 'hot', './server.js'],
-    cwd: temporaryDir
+    cwd: directory.path
   })
   await server.waitForOutput('Listening')
 
-  t.is(await get('http://localhost:10000'), 'Hello World!')
+  t.is(await http('http://localhost:10000'), 'Hello World!')
 
-  await writeFile(
+  await directory.writeFile(
     'app.js',
     `
     export default function(request, response) {
@@ -64,15 +52,15 @@ test('updating and re-importing a file', async (t) => {
   )
   await wait(300)
 
-  t.is(await get('http://localhost:10000'), 'Other Text')
+  t.is(await http('http://localhost:10000'), 'Other Text')
 
-  await writeFile(
+  await directory.writeFile(
     'text.js',
     `
     export default 'Text from other file'
     `
   )
-  await writeFile(
+  await directory.writeFile(
     'app.js',
     `
     import text from './text.js'
@@ -83,5 +71,5 @@ test('updating and re-importing a file', async (t) => {
   )
   await wait(300)
 
-  t.is(await get('http://localhost:10000'), 'Text from other file')
+  t.is(await http('http://localhost:10000'), 'Text from other file')
 })

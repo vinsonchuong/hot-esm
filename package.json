@@ -26,9 +26,7 @@
   },
   "devDependencies": {
     "ava": "^3.12.1",
-    "ava-patterns": "^1.2.0",
-    "fs-extra": "^9.0.1",
-    "got": "^11.6.0",
+    "ava-patterns": "^2.1.0",
     "quick-install": "^1.2.0",
     "semantic-release": "^17.1.1",
     "xo": "^0.33.1"
