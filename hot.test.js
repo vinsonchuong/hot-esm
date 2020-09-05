@@ -1,13 +1,9 @@
 import test from 'ava'
-import {useTemporaryDirectory} from 'ava-patterns'
+import {useTemporaryDirectory, runProcess, wait} from 'ava-patterns'
 import * as path from 'path'
-import * as childProcess from 'child_process'
-import {promisify} from 'util'
 import fs from 'fs-extra'
 import got from 'got'
 import install from 'quick-install'
-
-const sleep = promisify(setTimeout)
 
 async function get(url) {
   const response = await got(url)
@@ -50,26 +46,11 @@ test('updating and re-importing a file', async (t) => {
     `
   )
 
-  const server = childProcess.spawn('npx', ['hot', './server.js'], {
-    cwd: temporaryDir,
-    detached: true
+  const server = runProcess(t, {
+    command: ['npx', 'hot', './server.js'],
+    cwd: temporaryDir
   })
-  t.teardown(() => {
-    process.kill(-server.pid)
-  })
-
-  await new Promise((resolve, reject) => {
-    server.stdout.setEncoding('utf8')
-    server.stderr.setEncoding('utf8')
-    server.stdout.on('data', (data) => {
-      if (data.includes('Listening')) {
-        resolve()
-      }
-    })
-    server.stderr.on('data', (data) => {
-      reject(new Error(data))
-    })
-  })
+  await server.waitForOutput('Listening')
 
   t.is(await get('http://localhost:10000'), 'Hello World!')
 
@@ -81,7 +62,7 @@ test('updating and re-importing a file', async (t) => {
     }
     `
   )
-  await sleep(300)
+  await wait(300)
 
   t.is(await get('http://localhost:10000'), 'Other Text')
 
@@ -100,7 +81,7 @@ test('updating and re-importing a file', async (t) => {
     }
     `
   )
-  await sleep(300)
+  await wait(300)
 
   t.is(await get('http://localhost:10000'), 'Text from other file')
 })
