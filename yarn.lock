@@ -1816,10 +1816,10 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-ava-patterns@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ava-patterns/-/ava-patterns-2.1.0.tgz#a5a8ad4a7a7e94e6d50841a1d4e6e3dcfc4d66f0"
-  integrity sha512-xtogf2h0iXRkzrDiEyx4DwAaqMDMoNUGgroAiyM7RlInbaPJgsKElieqKlYVS/UmE0DrggeQwWiuXzCa5uffag==
+ava-patterns@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/ava-patterns/-/ava-patterns-2.3.0.tgz#97bfee719b642b79f16d042e22451d64046c43a5"
+  integrity sha512-GrGvXYs3SI5XJPr37RXVun9bTHsUPYBSxq2+ygU/1VY8MWv66t+b8lfJcGSRnvIy/d5AKga0QbDTe4q0qFo3UQ==
   dependencies:
     fs-extra "^9.0.1"
     passing-notes "^5.5.4"
