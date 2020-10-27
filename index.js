@@ -73,6 +73,7 @@ export async function resolve(specifier, context, defaultResolve) {
 
   if (
     child.protocol === 'nodejs:' ||
+    child.protocol === 'node:' ||
     child.pathname.includes('/node_modules/')
   ) {
     return result
