@@ -22,14 +22,14 @@
     "release": "semantic-release"
   },
   "dependencies": {
-    "@parcel/watcher": "^2.0.0-alpha.8"
+    "@parcel/watcher": "^2.0.0-alpha.9"
   },
   "devDependencies": {
-    "ava": "^3.12.1",
-    "ava-patterns": "^2.3.0",
-    "quick-install": "^1.2.0",
-    "semantic-release": "^17.1.1",
-    "xo": "^0.33.1"
+    "ava": "^3.14.0",
+    "ava-patterns": "^2.4.1",
+    "quick-install": "^1.2.1",
+    "semantic-release": "^17.3.0",
+    "xo": "^0.36.1"
   },
   "xo": {
     "prettier": true,

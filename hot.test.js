@@ -29,6 +29,7 @@ test('updating and re-importing a file', async (t) => {
     'app.js',
     `
     export default function(request, response) {
+      response.writeHead(200, {'Content-Type': 'text/plain'})
       response.end('Hello World!')
     }
     `
@@ -46,6 +47,7 @@ test('updating and re-importing a file', async (t) => {
     'app.js',
     `
     export default function(request, response) {
+      response.writeHead(200, {'Content-Type': 'text/plain'})
       response.end('Other Text')
     }
     `
@@ -65,6 +67,7 @@ test('updating and re-importing a file', async (t) => {
     `
     import text from './text.js'
     export default function(request, response) {
+      response.writeHead(200, {'Content-Type': 'text/plain'})
       response.end(text)
     }
     `
