@@ -66,7 +66,7 @@ watcher.subscribe(
 )
 
 export async function resolve(specifier, context, defaultResolve) {
-  const result = defaultResolve(specifier, context, defaultResolve)
+  const result = await defaultResolve(specifier, context, defaultResolve)
 
   const parent = context.parentURL ? new url.URL(context.parentURL) : null
   const child = new url.URL(result.url)
