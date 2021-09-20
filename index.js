@@ -61,8 +61,8 @@ watcher.subscribe(
     }
   },
   {
-    ignore: ['./node_modules']
-  }
+    ignore: ['./node_modules'],
+  },
 )
 
 export async function resolve(specifier, context, defaultResolve) {
@@ -85,6 +85,6 @@ export async function resolve(specifier, context, defaultResolve) {
   }
 
   return {
-    url: `${child.href}?version=${getVersion(child.pathname)}`
+    url: `${child.href}?version=${getVersion(child.pathname)}`,
   }
 }

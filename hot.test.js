@@ -1,3 +1,4 @@
+import process from 'process'
 import test from 'ava'
 import {useTemporaryDirectory, runProcess, wait, http} from 'ava-patterns'
 import install from 'quick-install'
@@ -23,7 +24,7 @@ test('updating and re-importing a file', async (t) => {
         console.log('Listening')
       }
     )
-    `
+    `,
   )
   await directory.writeFile(
     'app.js',
@@ -32,12 +33,12 @@ test('updating and re-importing a file', async (t) => {
       response.writeHead(200, {'Content-Type': 'text/plain'})
       response.end('Hello World!')
     }
-    `
+    `,
   )
 
   const server = runProcess(t, {
     command: ['npx', 'hot', './server.js'],
-    cwd: directory.path
+    cwd: directory.path,
   })
   await server.waitForOutput('Listening')
 
@@ -50,7 +51,7 @@ test('updating and re-importing a file', async (t) => {
       response.writeHead(200, {'Content-Type': 'text/plain'})
       response.end('Other Text')
     }
-    `
+    `,
   )
   await wait(300)
 
@@ -60,7 +61,7 @@ test('updating and re-importing a file', async (t) => {
     'text.js',
     `
     export default 'Text from other file'
-    `
+    `,
   )
   await directory.writeFile(
     'app.js',
@@ -70,7 +71,7 @@ test('updating and re-importing a file', async (t) => {
       response.writeHead(200, {'Content-Type': 'text/plain'})
       response.end(text)
     }
-    `
+    `,
   )
   await wait(300)
 
