@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 PACKAGE_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 
-npx --node-arg "--no-warnings --experimental-loader $PACKAGE_DIR/index.js" "$@"
+npx --node-options "--no-warnings --experimental-loader $PACKAGE_DIR/index.js" --call "node $*"

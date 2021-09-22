@@ -40,7 +40,7 @@ test('updating and re-importing a file', async (t) => {
     command: ['npx', 'hot', './server.js'],
     cwd: directory.path,
   })
-  await server.waitForOutput('Listening')
+  await server.waitForOutput('Listening', 5000)
 
   t.is(await http('http://localhost:10000'), 'Hello World!')
 
