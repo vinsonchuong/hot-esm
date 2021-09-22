@@ -22,7 +22,7 @@
     "release": "semantic-release"
   },
   "dependencies": {
-    "@parcel/watcher": "^2.0.0-alpha.11"
+    "chokidar": "^3.5.2"
   },
   "devDependencies": {
     "ava": "^3.15.0",

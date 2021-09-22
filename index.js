@@ -1,5 +1,6 @@
+import path from 'path'
 import * as url from 'url'
-import watcher from '@parcel/watcher'
+import chokidar from 'chokidar'
 
 const versions = new Map()
 function trackVersion(filePath) {
@@ -43,27 +44,24 @@ function untrackDependents(filePath) {
   dependents.delete(filePath)
 }
 
-watcher.subscribe(
-  './',
-  (error, events) => {
-    for (const event of events) {
-      if (event.type === 'update') {
-        const queue = [event.path]
-        while (queue.length > 0) {
-          const filePath = queue.pop()
-          incrementVersion(filePath)
-          queue.push(...getDependents(filePath))
-        }
-      } else if (event.type === 'delete') {
-        untrackVersion(event.path)
-        untrackDependents(event.path)
-      }
+chokidar
+  .watch('./', {
+    ignored: '**/node_modules/**',
+  })
+  .on('change', (relativeFilePath) => {
+    const filePath = path.resolve(relativeFilePath)
+    const queue = [filePath]
+    while (queue.length > 0) {
+      const filePath = queue.pop()
+      incrementVersion(filePath)
+      queue.push(...getDependents(filePath))
     }
-  },
-  {
-    ignore: ['./node_modules'],
-  },
-)
+  })
+  .on('unlink', (relativeFilePath) => {
+    const filePath = path.resolve(relativeFilePath)
+    untrackVersion(filePath)
+    untrackDependents(filePath)
+  })
 
 export async function resolve(specifier, context, defaultResolve) {
   const result = await defaultResolve(specifier, context, defaultResolve)
