@@ -51,5 +51,12 @@ will be running. Again, this can be managed using `global` state.
 Note that this only works with ECMAScript Modules and not with CommonJS modules.
 
 Also, edits to files in `node_modules`, even if they are ECMAScript Modules are
-ignored as attaching filesystem watchers to so many directories is too
-expensive.
+ignored by default as attaching filesystem watchers to so many directories is
+too expensive.
+
+But, specific packages inside of `node_modules` can be watched for updates by
+setting the environment variable:
+
+```sh
+HOT_INCLUDE_PACKAGES=package1,package2
+```

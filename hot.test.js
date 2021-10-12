@@ -43,6 +43,7 @@ test('updating and re-importing a file', async (t) => {
   await server.waitForOutput('Listening', 5000)
 
   t.is(await http('http://localhost:10000'), 'Hello World!')
+  await wait(500)
 
   await directory.writeFile(
     'app.js',
@@ -53,7 +54,7 @@ test('updating and re-importing a file', async (t) => {
     }
     `,
   )
-  await wait(300)
+  await wait(500)
 
   t.is(await http('http://localhost:10000'), 'Other Text')
 
@@ -73,7 +74,71 @@ test('updating and re-importing a file', async (t) => {
     }
     `,
   )
-  await wait(300)
+  await wait(500)
 
   t.is(await http('http://localhost:10000'), 'Text from other file')
+})
+
+test('updating an explicitly watched node_modules package', async (t) => {
+  const directory = await useTemporaryDirectory(t)
+
+  await directory.writeFile('package.json', '{"type": "module"}')
+
+  await install(process.cwd(), directory.path)
+
+  await directory.writeFile(
+    'server.js',
+    `
+    import * as http from 'http'
+    const server = http.createServer(async (request, response) => {
+      const app = await import('test-package')
+      response.writeHead(200, {'Content-Type': 'text/plain'})
+      response.end(app.default)
+    })
+    server.listen(
+      10001,
+      () => {
+        console.log('Listening')
+      }
+    )
+    `,
+  )
+
+  await directory.writeFile(
+    'node_modules/test-package/package.json',
+    `
+    {
+      "name": "test-package",
+      "version": "1.0.0",
+      "type": "module",
+      "main": "index.js"
+    }
+  `,
+  )
+  await directory.writeFile(
+    'node_modules/test-package/index.js',
+    `
+    export default 'Hello World!'
+  `,
+  )
+
+  const server = runProcess(t, {
+    command: ['npx', 'hot', './server.js'],
+    env: {...process.env, HOT_INCLUDE_PACKAGES: 'test-package'},
+    cwd: directory.path,
+  })
+  await server.waitForOutput('Listening', 5000)
+
+  t.is(await http('http://localhost:10001'), 'Hello World!')
+  await wait(500)
+
+  await directory.writeFile(
+    'node_modules/test-package/index.js',
+    `
+    export default 'Updated Package!'
+  `,
+  )
+  await wait(500)
+
+  t.is(await http('http://localhost:10001'), 'Updated Package!')
 })

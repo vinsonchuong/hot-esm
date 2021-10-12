@@ -1,6 +1,6 @@
 {
   "name": "hot-esm",
-  "version": "0.0.0",
+  "version": "1.1.0",
   "description": "ESM hot-reloading for Node.js",
   "keywords": [
     "hot",
@@ -26,10 +26,10 @@
   },
   "devDependencies": {
     "ava": "^3.15.0",
-    "ava-patterns": "^2.4.4",
+    "ava-patterns": "^2.4.5",
     "quick-install": "^2.0.2",
     "semantic-release": "^18.0.0",
-    "xo": "^0.44.0"
+    "xo": "^0.45.0"
   },
   "xo": {
     "prettier": true,

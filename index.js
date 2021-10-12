@@ -1,6 +1,25 @@
+import process from 'process'
 import path from 'path'
 import * as url from 'url'
 import chokidar from 'chokidar'
+
+const includedPackages = process.env.HOT_INCLUDE_PACKAGES
+  ? process.env.HOT_INCLUDE_PACKAGES.split(',')
+  : []
+function isPathIgnored(filePath) {
+  if (includedPackages.length === 0) {
+    return filePath.includes('/node_modules')
+  }
+
+  const isWithinIncludedPackage = includedPackages.some((packageName) =>
+    filePath.includes(`/node_modules/${packageName}`),
+  )
+  return (
+    !isWithinIncludedPackage &&
+    filePath.includes('/node_modules') &&
+    !filePath.endsWith('/node_modules')
+  )
+}
 
 const versions = new Map()
 function trackVersion(filePath) {
@@ -46,7 +65,10 @@ function untrackDependents(filePath) {
 
 chokidar
   .watch('./', {
-    ignored: '**/node_modules/**',
+    ignored: (relativeFilePath) => {
+      const filePath = path.resolve(relativeFilePath)
+      return isPathIgnored(filePath)
+    },
   })
   .on('change', (relativeFilePath) => {
     const filePath = path.resolve(relativeFilePath)
@@ -72,7 +94,7 @@ export async function resolve(specifier, context, defaultResolve) {
   if (
     child.protocol === 'nodejs:' ||
     child.protocol === 'node:' ||
-    child.pathname.includes('/node_modules/')
+    isPathIgnored(child.pathname)
   ) {
     return result
   }
