@@ -1,5 +1,6 @@
 import process from 'process'
 import path from 'path'
+import {promises as fs} from 'fs'
 import * as url from 'url'
 import chokidar from 'chokidar'
 
@@ -70,9 +71,11 @@ chokidar
       return isPathIgnored(filePath)
     },
   })
-  .on('change', (relativeFilePath) => {
+  .on('change', async (relativeFilePath) => {
     const filePath = path.resolve(relativeFilePath)
-    const queue = [filePath]
+    const realFilePath = await fs.realpath(filePath)
+
+    const queue = [realFilePath]
     while (queue.length > 0) {
       const filePath = queue.pop()
       incrementVersion(filePath)
