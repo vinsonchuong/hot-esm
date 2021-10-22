@@ -108,6 +108,11 @@ export async function resolve(specifier, context, defaultResolve) {
   }
 
   return {
+    ...result,
     url: `${child.href}?version=${getVersion(child.pathname)}`,
   }
+}
+
+export function load(url, context, defaultLoad) {
+  return defaultLoad(url, context, defaultLoad)
 }
