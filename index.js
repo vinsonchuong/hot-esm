@@ -25,6 +25,7 @@ function isPathIgnored(filePath) {
 const versions = new Map()
 function trackVersion(filePath) {
   if (!versions.has(filePath)) {
+    watcher.add(filePath)
     versions.set(filePath, 1)
   }
 }
@@ -64,13 +65,8 @@ function untrackDependents(filePath) {
   dependents.delete(filePath)
 }
 
-chokidar
-  .watch('./', {
-    ignored: (relativeFilePath) => {
-      const filePath = path.resolve(relativeFilePath)
-      return isPathIgnored(filePath)
-    },
-  })
+const watcher = chokidar
+  .watch([])
   .on('change', async (relativeFilePath) => {
     const filePath = path.resolve(relativeFilePath)
     const realFilePath = await fs.realpath(filePath)
