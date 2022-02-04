@@ -44,7 +44,9 @@ test('updating and re-importing a file', async (t) => {
   })
   await server.waitForOutput('Listening', 5000)
 
-  t.is(await http('http://localhost:10000'), 'Hello World!')
+  t.like(await http({method: 'GET', url: 'http://localhost:10000'}), {
+    body: 'Hello World!',
+  })
   await wait(500)
 
   await directory.writeFile(
@@ -58,7 +60,9 @@ test('updating and re-importing a file', async (t) => {
   )
   await wait(500)
 
-  t.is(await http('http://localhost:10000'), 'Other Text')
+  t.like(await http({method: 'GET', url: 'http://localhost:10000'}), {
+    body: 'Other Text',
+  })
 
   await directory.writeFile(
     'text.js',
@@ -78,7 +82,9 @@ test('updating and re-importing a file', async (t) => {
   )
   await wait(500)
 
-  t.is(await http('http://localhost:10000'), 'Text from other file')
+  t.like(await http({method: 'GET', url: 'http://localhost:10000'}), {
+    body: 'Text from other file',
+  })
 })
 
 test('updating an explicitly watched node_modules package', async (t) => {
@@ -131,7 +137,9 @@ test('updating an explicitly watched node_modules package', async (t) => {
   })
   await server.waitForOutput('Listening', 5000)
 
-  t.is(await http('http://localhost:10001'), 'Hello World!')
+  t.like(await http({method: 'GET', url: 'http://localhost:10001'}), {
+    body: 'Hello World!',
+  })
   await wait(500)
 
   await directory.writeFile(
@@ -142,7 +150,9 @@ test('updating an explicitly watched node_modules package', async (t) => {
   )
   await wait(500)
 
-  t.is(await http('http://localhost:10001'), 'Updated Package!')
+  t.like(await http({method: 'GET', url: 'http://localhost:10001'}), {
+    body: 'Updated Package!',
+  })
 })
 
 test('updating an explicitly watched hardlinked node_modules package', async (t) => {
@@ -198,7 +208,9 @@ test('updating an explicitly watched hardlinked node_modules package', async (t)
   })
   await server.waitForOutput('Listening', 5000)
 
-  t.is(await http('http://localhost:10002'), 'Hello World!')
+  t.like(await http({method: 'GET', url: 'http://localhost:10002'}), {
+    body: 'Hello World!',
+  })
   await wait(500)
 
   await packageDirectory.writeFile(
@@ -209,5 +221,7 @@ test('updating an explicitly watched hardlinked node_modules package', async (t)
   )
   await wait(500)
 
-  t.is(await http('http://localhost:10002'), 'Updated Package!')
+  t.like(await http({method: 'GET', url: 'http://localhost:10002'}), {
+    body: 'Updated Package!',
+  })
 })

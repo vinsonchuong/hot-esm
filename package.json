@@ -22,14 +22,17 @@
     "release": "semantic-release"
   },
   "dependencies": {
-    "chokidar": "^3.5.2"
+    "chokidar": "^3.5.3"
   },
   "devDependencies": {
-    "ava": "^3.15.0",
-    "ava-patterns": "^2.4.5",
+    "ava": "^4.0.1",
+    "ava-patterns": "^3.0.2",
     "quick-install": "^2.0.2",
-    "semantic-release": "^18.0.0",
-    "xo": "^0.45.0"
+    "semantic-release": "^19.0.2",
+    "xo": "^0.47.0"
+  },
+  "resolutions": {
+    "xo/eslint-import-resolver-webpack": ">=0.13.2"
   },
   "xo": {
     "prettier": true,
