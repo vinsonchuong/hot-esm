@@ -60,3 +60,12 @@ setting the environment variable:
 ```sh
 HOT_INCLUDE_PACKAGES=package1,package2
 ```
+
+## Development
+hot-esm provides debug logging detailing which files are watched, when they get
+invalidated, and when they get re-imported. Those logs can be enabled by
+setting the environment variable:
+
+```sh
+DEBUG=hot-esm
+```

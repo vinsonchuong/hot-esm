@@ -1,8 +1,11 @@
 import process from 'process'
 import path from 'path'
 import {promises as fs} from 'fs'
-import * as url from 'url'
+import {URL} from 'url'
 import chokidar from 'chokidar'
+import makeLogger from 'debug'
+
+const log = makeLogger('hot-esm')
 
 const includedPackages = process.env.HOT_INCLUDE_PACKAGES
   ? process.env.HOT_INCLUDE_PACKAGES.split(',')
@@ -25,6 +28,7 @@ function isPathIgnored(filePath) {
 const versions = new Map()
 function trackVersion(filePath) {
   if (!versions.has(filePath)) {
+    log('Watching %s', filePath)
     watcher.add(filePath)
     versions.set(filePath, 1)
   }
@@ -40,6 +44,7 @@ function getVersion(filePath) {
 
 function incrementVersion(filePath) {
   if (versions.has(filePath)) {
+    log('Invalidating %s', filePath)
     versions.set(filePath, versions.get(filePath) + 1)
   }
 }
@@ -71,6 +76,8 @@ const watcher = chokidar
     const filePath = path.resolve(relativeFilePath)
     const realFilePath = await fs.realpath(filePath)
 
+    log('Changed %s', realFilePath)
+
     const queue = [realFilePath]
     while (queue.length > 0) {
       const filePath = queue.pop()
@@ -87,8 +94,8 @@ const watcher = chokidar
 export async function resolve(specifier, context, defaultResolve) {
   const result = await defaultResolve(specifier, context, defaultResolve)
 
-  const parent = context.parentURL ? new url.URL(context.parentURL) : null
-  const child = new url.URL(result.url)
+  const parent = context.parentURL ? new URL(context.parentURL) : null
+  const child = new URL(result.url)
 
   if (
     child.protocol === 'nodejs:' ||
@@ -110,5 +117,11 @@ export async function resolve(specifier, context, defaultResolve) {
 }
 
 export function load(url, context, defaultLoad) {
+  const parsedUrl = new URL(url)
+
+  if (parsedUrl.protocol !== 'node:') {
+    log('Importing %s', parsedUrl.pathname)
+  }
+
   return defaultLoad(url, context, defaultLoad)
 }

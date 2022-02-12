@@ -41,13 +41,26 @@ test('updating and re-importing a file', async (t) => {
   const server = runProcess(t, {
     command: ['npx', 'hot', './server.js'],
     cwd: directory.path,
+    env: {
+      DEBUG: 'hot-esm',
+    },
   })
   await server.waitForOutput('Listening', 5000)
+
+  t.deepEqual(readLogs(server), [
+    `Watching ${directory.path}/server.js`,
+    `Importing ${directory.path}/server.js`,
+  ])
 
   t.like(await http({method: 'GET', url: 'http://localhost:10000'}), {
     body: 'Hello World!',
   })
   await wait(500)
+
+  t.deepEqual(readLogs(server).slice(2), [
+    `Watching ${directory.path}/app.js`,
+    `Importing ${directory.path}/app.js`,
+  ])
 
   await directory.writeFile(
     'app.js',
@@ -60,9 +73,17 @@ test('updating and re-importing a file', async (t) => {
   )
   await wait(500)
 
+  t.deepEqual(readLogs(server).slice(4), [
+    `Changed ${directory.path}/app.js`,
+    `Invalidating ${directory.path}/app.js`,
+    `Invalidating ${directory.path}/server.js`,
+  ])
+
   t.like(await http({method: 'GET', url: 'http://localhost:10000'}), {
     body: 'Other Text',
   })
+
+  t.deepEqual(readLogs(server).slice(7), [`Importing ${directory.path}/app.js`])
 
   await directory.writeFile(
     'text.js',
@@ -82,9 +103,21 @@ test('updating and re-importing a file', async (t) => {
   )
   await wait(500)
 
+  t.deepEqual(readLogs(server).slice(8), [
+    `Changed ${directory.path}/app.js`,
+    `Invalidating ${directory.path}/app.js`,
+    `Invalidating ${directory.path}/server.js`,
+  ])
+
   t.like(await http({method: 'GET', url: 'http://localhost:10000'}), {
     body: 'Text from other file',
   })
+
+  t.deepEqual(readLogs(server).slice(11), [
+    `Importing ${directory.path}/app.js`,
+    `Watching ${directory.path}/text.js`,
+    `Importing ${directory.path}/text.js`,
+  ])
 })
 
 test('updating an explicitly watched node_modules package', async (t) => {
@@ -225,3 +258,11 @@ test('updating an explicitly watched hardlinked node_modules package', async (t)
     body: 'Updated Package!',
   })
 })
+
+function readLogs(serverProcess) {
+  return serverProcess.output
+    .trim()
+    .split('\n')
+    .filter((line) => line.includes('hot-esm'))
+    .map((line) => line.match(/^.*? hot-esm (.*)$/)[1])
+}

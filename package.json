@@ -22,7 +22,8 @@
     "release": "semantic-release"
   },
   "dependencies": {
-    "chokidar": "^3.5.3"
+    "chokidar": "^3.5.3",
+    "debug": "^4.3.3"
   },
   "devDependencies": {
     "ava": "^4.0.1",
