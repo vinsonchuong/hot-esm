@@ -120,6 +120,74 @@ test('updating and re-importing a file', async (t) => {
   ])
 })
 
+test('updating and re-importing a file outside of the current directory', async (t) => {
+  const directory = await useTemporaryDirectory(t)
+
+  await directory.writeFile('package.json', '{"type": "module"}')
+  await directory.writeFile('sub/package.json', '{"type": "module"}')
+
+  await install(process.cwd(), path.join(directory.path, 'sub'))
+
+  await directory.writeFile(
+    'sub/server.js',
+    `
+    import * as http from 'http'
+    const server = http.createServer(async (request, response) => {
+      const app = await import('./app.js')
+      await app.default(request, response)
+    })
+    server.listen(
+      10003,
+      () => {
+        console.log('Listening')
+      }
+    )
+    `,
+  )
+
+  await directory.writeFile(
+    'sub/app.js',
+    `
+    import text from '../text.js'
+
+    export default function(request, response) {
+      response.writeHead(200, {'Content-Type': 'text/plain'})
+      response.end(text)
+    }
+    `,
+  )
+
+  await directory.writeFile(
+    'text.js',
+    `
+    export default 'Hello World!'
+    `,
+  )
+
+  const server = runProcess(t, {
+    command: ['npx', 'hot', './server.js'],
+    cwd: path.join(directory.path, 'sub'),
+  })
+  await server.waitForOutput('Listening', 5000)
+
+  t.like(await http({method: 'GET', url: 'http://localhost:10003'}), {
+    body: 'Hello World!',
+  })
+  await wait(500)
+
+  await directory.writeFile(
+    'text.js',
+    `
+    export default 'Updated Text!'
+    `,
+  )
+  await wait(500)
+
+  t.like(await http({method: 'GET', url: 'http://localhost:10003'}), {
+    body: 'Updated Text!',
+  })
+})
+
 test('updating an explicitly watched node_modules package', async (t) => {
   const directory = await useTemporaryDirectory(t)
 
