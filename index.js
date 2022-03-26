@@ -4,8 +4,10 @@ import {promises as fs} from 'fs'
 import {URL} from 'url'
 import chokidar from 'chokidar'
 import makeLogger from 'debug'
+import DependencyTree from './dependency-tree.js'
 
 const log = makeLogger('hot-esm')
+const dependencyTree = new DependencyTree()
 
 const includedPackages = process.env.HOT_INCLUDE_PACKAGES
   ? process.env.HOT_INCLUDE_PACKAGES.split(',')
@@ -25,51 +27,6 @@ function isPathIgnored(filePath) {
   )
 }
 
-const versions = new Map()
-function trackVersion(filePath) {
-  if (!versions.has(filePath)) {
-    log('Watching %s', filePath)
-    watcher.add(filePath)
-    versions.set(filePath, 1)
-  }
-}
-
-function untrackVersion(filePath) {
-  versions.delete(filePath)
-}
-
-function getVersion(filePath) {
-  return versions.get(filePath)
-}
-
-function incrementVersion(filePath) {
-  if (versions.has(filePath)) {
-    log('Invalidating %s', filePath)
-    versions.set(filePath, versions.get(filePath) + 1)
-  }
-}
-
-const dependents = new Map()
-function getDependents(filePath) {
-  if (dependents.has(filePath)) {
-    return dependents.get(filePath)
-  }
-
-  return new Set()
-}
-
-function addDependent(filePath, dependentFilePath) {
-  if (dependents.has(filePath)) {
-    dependents.get(filePath).add(dependentFilePath)
-  } else {
-    dependents.set(filePath, new Set([dependentFilePath]))
-  }
-}
-
-function untrackDependents(filePath) {
-  dependents.delete(filePath)
-}
-
 const watcher = chokidar
   .watch([])
   .on('change', async (relativeFilePath) => {
@@ -78,17 +35,14 @@ const watcher = chokidar
 
     log('Changed %s', realFilePath)
 
-    const queue = [realFilePath]
-    while (queue.length > 0) {
-      const filePath = queue.pop()
-      incrementVersion(filePath)
-      queue.push(...getDependents(filePath))
-    }
+    const invalidatedFiles =
+      dependencyTree.invalidateFileAndDependents(realFilePath)
+    log('Invalidating %s', Array.from(invalidatedFiles).join(', '))
   })
   .on('unlink', (relativeFilePath) => {
     const filePath = path.resolve(relativeFilePath)
-    untrackVersion(filePath)
-    untrackDependents(filePath)
+    log('Deleted %s', filePath)
+    dependencyTree.remove(filePath)
   })
 
 export async function resolve(specifier, context, defaultResolve) {
@@ -105,14 +59,20 @@ export async function resolve(specifier, context, defaultResolve) {
     return result
   }
 
-  trackVersion(child.pathname)
+  const childFilePath = child.pathname
+  if (!dependencyTree.has(childFilePath)) {
+    log('Watching %s', childFilePath)
+    dependencyTree.add(childFilePath)
+    watcher.add(childFilePath)
+  }
+
   if (parent) {
-    addDependent(child.pathname, parent.pathname)
+    dependencyTree.addDependent(childFilePath, parent.pathname)
   }
 
   return {
     ...result,
-    url: `${child.href}?version=${getVersion(child.pathname)}`,
+    url: `${child.href}?version=${dependencyTree.getVersion(childFilePath)}`,
   }
 }
 

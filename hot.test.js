@@ -75,15 +75,14 @@ test.serial('updating and re-importing a file', async (t) => {
 
   t.deepEqual(readLogs(server).slice(4), [
     `Changed ${directory.path}/app.js`,
-    `Invalidating ${directory.path}/app.js`,
-    `Invalidating ${directory.path}/server.js`,
+    `Invalidating ${directory.path}/app.js, ${directory.path}/server.js`,
   ])
 
   t.like(await http({method: 'GET', url: 'http://localhost:10000'}), {
     body: 'Other Text',
   })
 
-  t.deepEqual(readLogs(server).slice(7), [`Importing ${directory.path}/app.js`])
+  t.deepEqual(readLogs(server).slice(6), [`Importing ${directory.path}/app.js`])
 
   await directory.writeFile(
     'text.js',
@@ -103,17 +102,16 @@ test.serial('updating and re-importing a file', async (t) => {
   )
   await wait(500)
 
-  t.deepEqual(readLogs(server).slice(8), [
+  t.deepEqual(readLogs(server).slice(7), [
     `Changed ${directory.path}/app.js`,
-    `Invalidating ${directory.path}/app.js`,
-    `Invalidating ${directory.path}/server.js`,
+    `Invalidating ${directory.path}/app.js, ${directory.path}/server.js`,
   ])
 
   t.like(await http({method: 'GET', url: 'http://localhost:10000'}), {
     body: 'Text from other file',
   })
 
-  t.deepEqual(readLogs(server).slice(11), [
+  t.deepEqual(readLogs(server).slice(9), [
     `Importing ${directory.path}/app.js`,
     `Watching ${directory.path}/text.js`,
     `Importing ${directory.path}/text.js`,
