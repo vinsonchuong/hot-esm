@@ -11,7 +11,7 @@ jobs:
         cache: yarn
     - run: yarn
     - run: yarn test
-    - if: github.ref == 'refs/heads/master'
+    - if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/alpha'
       run: yarn release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
