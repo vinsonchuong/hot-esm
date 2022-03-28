@@ -46,6 +46,7 @@
   },
   "ava": {
     "verbose": true,
-    "timeout": "5m"
+    "timeout": "5m",
+    "concurrency": 1
   }
 }

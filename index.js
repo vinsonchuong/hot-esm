@@ -27,6 +27,8 @@ function isPathIgnored(filePath) {
   )
 }
 
+let messagePort
+
 const watcher = chokidar
   .watch([])
   .on('change', async (relativeFilePath) => {
@@ -38,6 +40,8 @@ const watcher = chokidar
     const invalidatedFiles =
       dependencyTree.invalidateFileAndDependents(realFilePath)
     log('Invalidating %s', Array.from(invalidatedFiles).join(', '))
+
+    messagePort.postMessage(realFilePath)
   })
   .on('unlink', (relativeFilePath) => {
     const filePath = path.resolve(relativeFilePath)
@@ -76,12 +80,61 @@ export async function resolve(specifier, context, defaultResolve) {
   }
 }
 
-export function load(url, context, defaultLoad) {
+export async function load(url, context, defaultLoad) {
   const parsedUrl = new URL(url)
 
   if (parsedUrl.protocol !== 'node:') {
     log('Importing %s', parsedUrl.pathname)
   }
 
-  return defaultLoad(url, context, defaultLoad)
+  const result = await defaultLoad(url, context, defaultLoad)
+
+  if (result.format === 'module') {
+    const source = result.source.toString()
+
+    const newSource = source.replace(
+      /if\s*\(\s*import\.meta\.hot\s*\)/,
+      'if (globalThis.hotEsm.extendImportMeta(import.meta, () => import(import.meta.url)), import.meta.hot.accept)',
+    )
+
+    return {
+      ...result,
+      source: newSource,
+    }
+  }
+
+  return result
+}
+
+export function globalPreload({port}) {
+  messagePort = port
+
+  return `
+    globalThis.hotEsm = {
+      extendImportMeta(importMeta, importModule) {
+        const filePath = new URL(importMeta.url).pathname
+        const handlers = this.handlers
+
+        importMeta.hot = {
+          accept(callback) {
+            if (!handlers[filePath]) {
+              handlers[filePath] = async () => {
+                callback(await importModule())
+              }
+            }
+          }
+        }
+      },
+      handlers: {}
+    }
+
+  port.onmessage = (event) => {
+    const path = event.data
+
+    const handlers = globalThis.hotEsm.handlers
+    if (handlers[path]) {
+      handlers[path]()
+    }
+  }
+  `
 }

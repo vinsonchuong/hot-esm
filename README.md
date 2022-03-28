@@ -13,6 +13,79 @@ by running
 yarn add hot-esm
 ```
 
+## In Development: Hot Module Replacement
+```js
+export let text = 'Hello World!'
+
+if (import.meta.hot) {
+  import.meta.hot.accept((module) => {
+    text = module.text
+  })
+}
+```
+
+The interface that hot-esm currently provides is pretty clunky:
+
+- It requires manual re-importing of modules without knowledge about updates
+- It requires manual cleanup of side-effects when a new version of a module is
+  imported
+
+To address these problems, I'm experimenting with implementing an HMR interface
+similar to those provided by bundlers. Namely, I'm taking inspiration from the
+[HMR API](https://vitejs.dev/guide/api-hmr.html) provided by Vite.
+
+### Implementation
+Using the
+[`globalPreload()`](https://nodejs.org/docs/latest-v17.x/api/esm.html#globalpreload)
+loader hook, hot-esm creates a [global registry](/index.js#L128) to track
+modules that can accept updates.
+
+For each module that subscribes using `import.meta.hot.accept()`, hot-esm
+tracks:
+
+- The callback provided as argument
+- The absolute path to the module, derived from `import.meta.url`
+- A function defined within the module to re-`import()` that module. This is
+  necessary because the `globalPreload()` hook does not allow dynamic
+  `import()`.
+
+In order to define `import.meta.hot.accept()` and allow it to collect the above
+information, the [module source code is modified](/index.js#L95) via the
+[`load()`](https://nodejs.org/docs/latest-v17.x/api/esm.html#loadurl-context-defaultload)
+loader hook. In order to minimize the disruption to stack trace line numbers,
+the first instance of
+
+```js
+if (import.meta.hot) {
+  // Code
+}
+```
+
+is, without changing the line count, replaced with:
+
+```js
+if (globalThis.hotEsm.extendImportMeta(import.meta, () => import(import.meta.url)), import.meta.hot) {
+  // Code
+}
+```
+
+[`globalThis.hotEsm.extendImportMeta()`](/index.js#L114-L127) then ensures that
+the needed information is added to the global registry when
+`import.meta.hot.accept()` is called.
+
+When it comes to delivering updated modules to subscribers, when a module is updated,
+[its file path is sent](/index.js#L44) [to the registry](/index.js#L131-L138).
+From there, the callback passed to `import.meta.hot.accept()` is called with the
+updated module.
+
+### Ongoing Work
+I plan to try this interface against a few usecases before:
+
+- Looking for a more robust way to modify the module source code
+- Potentially expanding the interface of `import.meta.hot.accept()` to allow
+  modules to accept updates for direct dependencies.
+- Potentially implementing other methods from Vite's HMR API.
+
 ## Usage
 hot-esm provides a
 [loader](https://nodejs.org/api/esm.html#esm_experimental_loaders) that clears
