@@ -2265,10 +2265,10 @@ from2@^2.3.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
-fs-extra@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.0.0.tgz#9ff61b655dde53fb34a82df84bb214ce802e17c1"
-  integrity sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==
+fs-extra@^10.0.0, fs-extra@^10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.1.0.tgz#02873cfbc4084dde127eaa5f9905eef2325d1abf"
+  integrity sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==
   dependencies:
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
@@ -4678,11 +4678,11 @@ qrcode-terminal@^0.12.0:
   integrity sha512-EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ==
 
 quick-install@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/quick-install/-/quick-install-2.0.2.tgz#4e47acb2b7e701f2ec82586129a4431c9b71c41c"
-  integrity sha512-sl0hma9M/13iboDECf6dVujOsMVilx1QX8Iz8O+mzE6kBedz/fd7RBr774RbZHAi719ME4RI3jKYX6ZayfpTMQ==
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/quick-install/-/quick-install-2.0.3.tgz#cea9762a10f401011795e2008034886f17063983"
+  integrity sha512-VQjVWvBKWzcZV/oHtiGeR69TdY4npMvukBAvzC/OF9IQaWF0AAwlowE00RUhD50HbV+pIb4T9+ogqTZuu8Gq8g==
   dependencies:
-    fs-extra "^10.0.0"
+    fs-extra "^10.1.0"
 
 quick-lru@^4.0.1:
   version "4.0.1"
