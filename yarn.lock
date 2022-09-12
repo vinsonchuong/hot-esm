@@ -841,9 +841,9 @@ asap@^2.0.0:
   integrity sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==
 
 ava-patterns@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/ava-patterns/-/ava-patterns-3.0.2.tgz#8935b64104280b25faffb6afa14d8162619b8e45"
-  integrity sha512-CHLSQPQeAQBNXu6NtqD2jctuFtK0mlPQ+8oXcWHkPd7K9gBmNKBebGGZmMBZkX3wAnfUz+GLvARqWIIpP/ioMg==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ava-patterns/-/ava-patterns-3.1.0.tgz#ca6aedba1af3d44b5592873b60fe2a0423042200"
+  integrity sha512-+QntLU0YgOr5Xn9UNJMPegWi0VAnIQ79MN1YUCibzKs4K4LPLvY5pvZsREWgP8vDtNj4ObiLsl5wQFG5SxJFRQ==
   dependencies:
     fs-extra "^10.0.0"
     passing-notes "^6.5.5"
