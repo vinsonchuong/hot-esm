@@ -5,6 +5,7 @@ import {URL} from 'url'
 import chokidar from 'chokidar'
 import makeLogger from 'debug'
 import DependencyTree from './dependency-tree.js'
+import {supportsFileEvents} from './platform-capabilities.js'
 
 const log = makeLogger('hot-esm')
 const dependencyTree = new DependencyTree()
@@ -28,7 +29,9 @@ function isPathIgnored(filePath) {
 }
 
 const watcher = chokidar
-  .watch([])
+  .watch([], {
+    usePolling: !supportsFileEvents(path.resolve()),
+  })
   .on('change', async (relativeFilePath) => {
     const filePath = path.resolve(relativeFilePath)
     const realFilePath = await fs.realpath(filePath)
