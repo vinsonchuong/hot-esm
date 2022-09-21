@@ -1596,12 +1596,12 @@ dot-prop@^5.1.0:
   dependencies:
     is-obj "^2.0.0"
 
-dot-prop@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-6.0.1.tgz#fc26b3cf142b9e59b74dbd39ed66ce620c681083"
-  integrity sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==
+dot-prop@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-7.2.0.tgz#468172a3529779814d21a779c1ba2f6d76609809"
+  integrity sha512-Ol/IPXUARn9CSbkrdV4VJo7uCy1I3VuSiWCaFSg+8BdUOzF9n3jefIpcgAydvUZbTdEBZs2vEiTiS9m61ssiDA==
   dependencies:
-    is-obj "^2.0.0"
+    type-fest "^2.11.2"
 
 duplexer2@~0.1.0:
   version "0.1.4"
@@ -5139,11 +5139,11 @@ socks@^2.6.2:
     smart-buffer "^4.2.0"
 
 sort-on@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/sort-on/-/sort-on-5.0.0.tgz#86598da8d030a385b663a2862a884f2882ab4037"
-  integrity sha512-TpcWzcspCXEYpX5aTwhFuTYLKhNmbKgVr9Bn3BVNg79ga8R89vqrZy6p0ZoonNZAMchPWAxHBxRun0sMj3Inww==
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/sort-on/-/sort-on-5.1.0.tgz#846f4caf935181f2be5013a43cafcdbb93554ddf"
+  integrity sha512-EudIAZKP759KQwsxlydiLr1/ecoh5pXXsfxbn5vM+dHL9DWwrEe/YjyipKzsEZA99LCFb6GDE1Ln4382tanxNQ==
   dependencies:
-    dot-prop "^6.0.1"
+    dot-prop "^7.2.0"
 
 source-map@^0.6.1:
   version "0.6.1"
@@ -5610,6 +5610,11 @@ type-fest@^2.0.0:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.11.0.tgz#732ffaf73e4d17d1f762a539876a791b45ed273b"
   integrity sha512-GwRKR1jZMAQP/hVR929DWB5Z2lwSIM/nNcHEfDj2E0vOMhcYbqFxGKE5JaSzMdzmEtWJiamEn6VwHs/YVXVhEQ==
+
+type-fest@^2.11.2:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.19.0.tgz#88068015bb33036a598b952e55e9311a60fd3a9b"
+  integrity sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==
 
 type-is@^1.6.18:
   version "1.6.18"
