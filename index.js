@@ -14,18 +14,17 @@ const includedPackages = process.env.HOT_INCLUDE_PACKAGES
   ? process.env.HOT_INCLUDE_PACKAGES.split(',')
   : []
 function isPathIgnored(filePath) {
-  if (includedPackages.length === 0) {
-    return filePath.includes('/node_modules')
+  if (filePath.includes('/.yarn/')) {
+    return true
   }
 
-  const isWithinIncludedPackage = includedPackages.some((packageName) =>
-    filePath.includes(`/node_modules/${packageName}`),
-  )
-  return (
-    !isWithinIncludedPackage &&
-    filePath.includes('/node_modules') &&
-    !filePath.endsWith('/node_modules')
-  )
+  if (filePath.includes('/node_modules/')) {
+    return !includedPackages.some((packageName) =>
+      filePath.includes(`/node_modules/${packageName}`),
+    )
+  }
+
+  return false
 }
 
 const watcher = chokidar
@@ -48,43 +47,46 @@ const watcher = chokidar
     dependencyTree.remove(filePath)
   })
 
-export async function resolve(specifier, context, defaultResolve) {
-  const result = await defaultResolve(specifier, context, defaultResolve)
+export async function resolve(specifier, context, nextResolve) {
+  const parentUrl = context.parentURL && new URL(context.parentURL)
+  if (parentUrl?.searchParams.has('hot-esm')) {
+    parentUrl.searchParams.delete('hot-esm')
+    context = {...context, parentURL: parentUrl.href}
+  }
 
-  const parent = context.parentURL ? new URL(context.parentURL) : null
-  const child = new URL(result.url)
+  const result = await nextResolve(specifier, context)
 
-  if (
-    child.protocol === 'nodejs:' ||
-    child.protocol === 'node:' ||
-    isPathIgnored(child.pathname)
-  ) {
+  const resultUrl = new URL(result.url)
+  const resultPath = resultUrl.pathname
+  if (resultUrl.protocol !== 'file:' || isPathIgnored(resultPath)) {
     return result
   }
 
-  const childFilePath = child.pathname
-  if (!dependencyTree.has(childFilePath)) {
-    log('Watching %s', childFilePath)
-    dependencyTree.add(childFilePath)
-    watcher.add(childFilePath)
+  if (!dependencyTree.has(resultPath)) {
+    log('Watching %s', resultPath)
+    dependencyTree.add(resultPath)
+    watcher.add(resultPath)
   }
 
-  if (parent) {
-    dependencyTree.addDependent(childFilePath, parent.pathname)
+  const parentPath = parentUrl?.pathname
+  if (parentPath) {
+    dependencyTree.addDependent(resultPath, parentPath)
   }
 
-  return {
-    ...result,
-    url: `${child.href}?version=${dependencyTree.getVersion(childFilePath)}`,
-  }
+  resultUrl.searchParams.set('hot-esm', dependencyTree.getVersion(resultPath))
+  return {...result, url: resultUrl.href}
 }
 
-export function load(url, context, defaultLoad) {
+export function load(url, context, nextLoad) {
   const parsedUrl = new URL(url)
+  if (parsedUrl.searchParams.has('hot-esm')) {
+    parsedUrl.searchParams.delete('hot-esm')
+    url = parsedUrl.href
+  }
 
-  if (parsedUrl.protocol !== 'node:') {
+  if (parsedUrl.protocol === 'file:') {
     log('Importing %s', parsedUrl.pathname)
   }
 
-  return defaultLoad(url, context, defaultLoad)
+  return nextLoad(url, context)
 }
