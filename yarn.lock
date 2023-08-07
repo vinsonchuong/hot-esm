@@ -2068,7 +2068,7 @@ eslint-plugin-eslint-comments@^3.2.0:
     escape-string-regexp "^1.0.5"
     ignore "^5.0.5"
 
-eslint-plugin-import@^2.27.5:
+eslint-plugin-import@~2.27.5:
   version "2.27.5"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.27.5.tgz#876a6d03f52608a3e5bb439c2550588e51dd6c65"
   integrity sha512-LmEt3GVofgiGuiE+ORpnvP+kAm3h6MLZJ4Q5HCyHADofsb4VzXFsRiWj3c0OFiV+3DWFh0qg3v9gcPlfc3zRow==
@@ -6483,9 +6483,9 @@ ws@^7.5.3:
   integrity sha512-BAkMFcAzl8as1G/hArkxOxq3G7pjUqQ3gzYbLL0/5zNkph70e+lCoxBGnm6AW1+/aiNeV4fnKqZ8m4GZewmH2w==
 
 xo@^0.55.0:
-  version "0.55.0"
-  resolved "https://registry.yarnpkg.com/xo/-/xo-0.55.0.tgz#54e1971e36048fc4101787033e40f0fe62d32783"
-  integrity sha512-0pINhVcbW3Iz4W4tRlTwQBATVEr1VMMFfQJzFTLwjCRJJdkJRgXh9BEJtcpttmPjbc7lROhVrR2hGXoq0yAsyQ==
+  version "0.55.1"
+  resolved "https://registry.yarnpkg.com/xo/-/xo-0.55.1.tgz#9ef320a2dc46ccd42ca3ccf3c6c2a338ae2a6e8b"
+  integrity sha512-xjwxX6YM2JmAqmoGaXiBSyzE4DVCzSCgIux4Y001BeMc2V42xyoZtdrqICGYwo8or4cS/QBKJqKiy5QbJ+YqHw==
   dependencies:
     "@eslint/eslintrc" "^2.1.0"
     "@typescript-eslint/eslint-plugin" "^6.0.0"
@@ -6501,7 +6501,7 @@ xo@^0.55.0:
     eslint-import-resolver-webpack "^0.13.2"
     eslint-plugin-ava "^14.0.0"
     eslint-plugin-eslint-comments "^3.2.0"
-    eslint-plugin-import "^2.27.5"
+    eslint-plugin-import "~2.27.5"
     eslint-plugin-n "^16.0.1"
     eslint-plugin-no-use-extend-native "^0.5.0"
     eslint-plugin-prettier "^5.0.0"
