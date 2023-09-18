@@ -33,7 +33,7 @@
     "ava": "^5.0.1",
     "ava-patterns": "^3.1.0",
     "quick-install": "^2.0.3",
-    "semantic-release": "^21.0.0",
+    "semantic-release": "^22.0.0",
     "xo": "^0.56.0"
   },
   "resolutions": {
