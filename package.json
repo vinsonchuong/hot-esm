@@ -27,7 +27,7 @@
     "debug": "^4.3.3",
     "is-path-inside": "^4.0.0",
     "is-wsl": "^3.0.0",
-    "sort-on": "^5.0.0"
+    "sort-on": "^6.0.0"
   },
   "devDependencies": {
     "ava": "^5.0.1",
