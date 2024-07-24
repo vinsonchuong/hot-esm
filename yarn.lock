@@ -6931,9 +6931,9 @@ ws@^7.5.3:
   integrity sha512-+dbF1tHwZpXcbOJdVOkzLDxZP1ailvSxM6ZweXTegylPny803bFhA+vqBYw4s31NSAk4S2Qz+AKXK9a4wkdjcQ==
 
 xo@^0.59.0:
-  version "0.59.1"
-  resolved "https://registry.yarnpkg.com/xo/-/xo-0.59.1.tgz#783036d65b305836b9104800c91263a872fbea9f"
-  integrity sha512-ci0+GRp5UzrbxXZ+NxFfSBCt4d9bqpWiILtGpv3RbUYx/+aY/x+VELI/xPHhHvAsn6Wm2iS7xn8DlCSItbVBQw==
+  version "0.59.2"
+  resolved "https://registry.yarnpkg.com/xo/-/xo-0.59.2.tgz#11a5e46b9a6e0b6afe041eff3498d4e8248c494b"
+  integrity sha512-sg7MEgQp/I7KW8ssUdTsO0JmOjppPWx3m3y1/T0r5lQY9n4UAUjF2zuPX/C0IcwrNwFpdHoSYcbHUdGEmWUFmw==
   dependencies:
     "@eslint/eslintrc" "^3.1.0"
     "@typescript-eslint/eslint-plugin" "^7.16.1"
