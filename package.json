@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@stroncium/procfs": "^1.2.1",
-    "chokidar": "^3.5.3",
+    "chokidar": "^4.0.0",
     "debug": "^4.3.3",
     "is-path-inside": "^4.0.0",
     "is-wsl": "^3.0.0",
