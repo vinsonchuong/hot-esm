@@ -8194,9 +8194,9 @@ ws@^7.5.3:
   integrity sha512-+dbF1tHwZpXcbOJdVOkzLDxZP1ailvSxM6ZweXTegylPny803bFhA+vqBYw4s31NSAk4S2Qz+AKXK9a4wkdjcQ==
 
 xo@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/xo/-/xo-1.0.0.tgz#84e41304982efabf3afd0bb700014955c465e31b"
-  integrity sha512-KwGA+L48Am+EzGrThUH4z4hzJt5J9O0nX2dEvV28owfpUFb3OZyLM2VG1qdxoy073mwKoDWJ7BcKFHrUwNvbzg==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/xo/-/xo-1.0.3.tgz#84cc3213faf4508176e7de75f928da60347acdeb"
+  integrity sha512-MQfuC5Bw2EMuzoTrnmgrXtaEKvCGv3Pf/hp4sRh6IB69fKaIgFoYwAz5FhoHag7DbhpxxADHpX/T7ITrIY6+tQ==
   dependencies:
     "@eslint-community/eslint-plugin-eslint-comments" "^4.5.0"
     "@sindresorhus/tsconfig" "^7.0.0"
