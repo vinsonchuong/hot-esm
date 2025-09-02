@@ -6549,9 +6549,9 @@ socks@^2.8.3:
     smart-buffer "^4.2.0"
 
 sort-on@^6.0.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/sort-on/-/sort-on-6.1.0.tgz#96899b3536e4b2694090842f2e766ba11ccc7459"
-  integrity sha512-WTECP0nYNWO1n2g5bpsV0yZN9cBmZsF8ThHFbOqVN0HBFRoaQZLLEMvMmJlKHNPYQeVngeI5+jJzIfFqOIo1OA==
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/sort-on/-/sort-on-6.1.1.tgz#266d0c71ecc3e4f9b0be0516cf360d63df9534f3"
+  integrity sha512-PB8pVvXAoRBijBCvuKJnmo06D8mSnQlLij0abfB2VdOpfFm29sPGYD4ft2prUPo1AZXTnkn3pP48AppRWyMkrw==
   dependencies:
     dot-prop "^9.0.0"
 
