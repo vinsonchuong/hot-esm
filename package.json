@@ -30,7 +30,7 @@
     "sort-on": "^7.0.0"
   },
   "devDependencies": {
-    "ava": "^6.0.0",
+    "ava": "^7.0.0",
     "ava-patterns": "^3.1.0",
     "quick-install": "^2.0.3",
     "semantic-release": "^25.0.0",
