@@ -6864,9 +6864,9 @@ wsl-utils@^0.3.0:
     powershell-utils "^0.1.0"
 
 xo@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/xo/-/xo-3.0.1.tgz#66a18afc98d39e1380c6e520ea8eba5a95a1d84b"
-  integrity sha512-khj+FZ0QPPdcjI5BWgFWUpjQTlSNFlEUEgWeyWQbOd2ivaHnCRED1kEVXasnoWZ0BfS37u9kCD1/nY17UInfCg==
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/xo/-/xo-3.0.2.tgz#23555ec8c6b66627ea41c0014c325b7e5b064d55"
+  integrity sha512-J+fE46NFf0Wtpg8ewKvg4kGLvhXAL3+WuGD1aNSTMGNYF8luF4McvRWZDo9HDRmVTNCEVnPYJn1y/iXMV4PN0w==
   dependencies:
     "@sindresorhus/tsconfig" "^8.1.0"
     arrify "^3.0.0"
